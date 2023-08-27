@@ -1,9 +1,9 @@
-<?php 
+<?php
     // Definiendo ruta para require_once
     define('__ROOT__', dirname(dirname(__FILE__)));
 
     // Solicitando db class
-    require_once(__ROOT__.'\db.php');
+    require_once(__ROOT__.'/db.php');
 
     // Instancia
     $db = new db();
@@ -22,7 +22,7 @@
 
     // renderizando json e invirtiendo orden
     $json = json_encode(array_reverse($precios));
-    
+
     //Modificando el header y mandando los datos
     header('Content-type: application/json; charset=utf-8');
     echo $json;

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class db {
     //Propiedades
@@ -8,7 +8,6 @@ class db {
     public $nombreDB;
     private $endPoint;
 
-    //Metodos
     public function __construct() {
         $this -> hostname = 'suLocalhost';
         $this -> username = 'suUsuario';
@@ -33,7 +32,7 @@ class db {
 
         // Haciendo consulta
         $respuesta = mysqli_query($conneccion, $query);
-        
+
         // Cerrando coneccion mysql
         mysqli_close($conneccion);
 
@@ -60,17 +59,21 @@ class db {
 
         // retornando array
         return $jsonObject["payload"];
-
     }
 
     public function almacenadoLocal() {
         // Llamando funcion que trae los datos del endpoint
         $datos = $this -> recibiendoData();
 
+        $dateTime = new DateTime($datos["created_at"]);
+
+        // Eliminar la indicación de zona horaria
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+
         // Separando en variables locales (memoria)
         $high = $datos["high"];
         $last = $datos["last"];
-        $created_at = $datos["created_at"];
+        $created_at = $dateTime->format('Y-m-d H:i:s');;
         $book = $datos["book"];
         $volume = $datos["volume"];
         $vwap = $datos["vwap"];
@@ -79,7 +82,7 @@ class db {
         $bid = $datos["bid"];
         $change_24 = $datos["change_24"];
         $rolling_average_change = $datos["rolling_average_change"]["6"];
-        
+
         // Guardando datos en base de datos local
         // Query de insercion
         $query = "INSERT INTO registros (high, last, created_at, book, volume, vwap, low, ask, bid, change_24, rolling_average_change) VALUES ('$high', '$last', '$created_at', '$book', '$volume', '$vwap', '$low', '$ask', '$bid', '$change_24', '$rolling_average_change')";
